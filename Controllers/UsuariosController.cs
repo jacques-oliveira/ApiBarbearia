@@ -21,7 +21,7 @@ public class UsuariosController : ControllerBase{
         return usuarios;
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}",Name ="ObterUsuario")]
     public ActionResult<Usuario> Get(int id){
         var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
 
@@ -30,6 +30,19 @@ public class UsuariosController : ControllerBase{
         }
 
         return usuario;
+    }
+
+    [HttpPost]
+    public ActionResult Post(Usuario usuario){
+        if(usuario is null){
+            return BadRequest();
+        }
+
+        _context.Usuarios.Add(usuario);
+        _context.SaveChanges();
+
+        return new CreatedAtRouteResult("ObterUsuario",
+            new { id = usuario.UsuarioId, usuario});
     }
 
     [HttpPut("{id:int}")]
@@ -44,4 +57,6 @@ public class UsuariosController : ControllerBase{
 
         return Ok(usuario);
     }
+
+
 }
