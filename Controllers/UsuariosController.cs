@@ -31,4 +31,17 @@ public class UsuariosController : ControllerBase{
 
         return usuario;
     }
+
+    [HttpPut("{id:int}")]
+    public ActionResult<Usuario> Put(int id, Usuario usuario){
+        
+        if(id != usuario.UsuarioId){
+            return NotFound("O usuário não existe!");
+        }
+
+        _context.Entry(usuario).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(usuario);
+    }
 }
