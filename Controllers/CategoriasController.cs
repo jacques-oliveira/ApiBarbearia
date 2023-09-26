@@ -13,11 +13,11 @@ public class CategoriasController : ControllerBase{
 
     [HttpGet]
     public ActionResult<IEnumerable<Categoria>> Get(){
-        return _context.Categorias.ToList();
+        return _context.Categorias.AsNoTracking().ToList();
     }
 
     [HttpGet("produtos")]
     public ActionResult<IEnumerable<Categoria>> GetCategoriaProduto(){
-        return _context.Categorias.Include(p=> p.Produtos).ToList();
+        return _context.Categorias.Include(p=> p.Produtos).Take(5).ToList();
     }
 }

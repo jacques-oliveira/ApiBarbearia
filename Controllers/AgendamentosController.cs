@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("[controller]")]
@@ -13,7 +14,7 @@ private readonly AppDbContext _context;
 
     [HttpGet]
     public ActionResult<IEnumerable<Agendamento>> Get(){
-        var agendamentos = _context.Agendamentos.ToList();
+        var agendamentos = _context.Agendamentos.AsNoTracking().ToList();
 
         if(agendamentos is null){
             return BadRequest("Agendamento não enconrado!");

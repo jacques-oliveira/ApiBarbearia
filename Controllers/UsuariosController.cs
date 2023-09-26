@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("[controller]")]
@@ -12,7 +13,7 @@ public class UsuariosController : ControllerBase{
 
     [HttpGet]
     public ActionResult<IEnumerable<Usuario>> Get(){
-        var usuarios = _context.Usuarios.ToList();
+        var usuarios = _context.Usuarios.AsNoTracking().ToList();
 
         if(usuarios is null){
             return BadRequest("Usuários não encontrados");
