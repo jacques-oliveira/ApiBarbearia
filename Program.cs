@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,8 @@ builder.Services.AddDbContext<AppDbContext>(options=>
     ServerVersion.AutoDetect(MysqlConnection))
 );
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options=> 
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

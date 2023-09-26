@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("Produtos")]
 public class Produto{
@@ -18,5 +19,6 @@ public class Produto{
     [StringLength(300)]
     public string? ImagemUrl {get; set;}
     public int CategoriaId {get; set;}
+    [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}                   
 }

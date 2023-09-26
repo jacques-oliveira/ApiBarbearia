@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("Usuarios")]
 public class Usuario{
@@ -19,5 +20,6 @@ public class Usuario{
     public int EmailId {get;set;}
     public int TelefoneId {get;set;}
     public int EnderecoId {get;set;}
+    [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}           
 }
