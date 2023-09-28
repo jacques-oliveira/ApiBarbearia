@@ -16,10 +16,10 @@ public class Usuario{
     [Required]
     public DateTime DataNascimento { get; set; }
     [Column(TypeName =("Int(1)"))]
-    public int NivelAcesso {get; set;}
-    public int EmailId {get;set;}
-    public int TelefoneId {get;set;}
-    public int EnderecoId {get;set;}
+    public int NivelAcesso {get; set;}    
     [JsonIgnore]
-    public ICollection<Agendamento>? Agendamentos {get;set;}           
+    public ICollection<Agendamento>? Agendamentos {get;set;}   
+    public ICollection<Email>? Emails {get;set;}        
+    public Endereco? Endereco {get; set;}
+    public Telefone? Telefone {get;set;}
 }

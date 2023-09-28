@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiBarbearia.Migrations
 {
     /// <inheritdoc />
-    public partial class mstart : Migration
+    public partial class MigracaoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,54 +33,21 @@ namespace ApiBarbearia.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Emails",
+                name: "Usuarios",
                 columns: table => new
                 {
-                    EmailId = table.Column<int>(type: "int", nullable: false)
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EnderecoEmail = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    Nome = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Cpf = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DataNascimento = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    NivelAcesso = table.Column<int>(type: "Int(1)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Emails", x => x.EmailId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Enderecos",
-                columns: table => new
-                {
-                    EnderecoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Logradouro = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Numero = table.Column<int>(type: "int", nullable: false),
-                    Bairro = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Cep = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Enderecos", x => x.EnderecoId);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Telefones",
-                columns: table => new
-                {
-                    TelefoneId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Celular = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Fixo = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Telefones", x => x.TelefoneId);
+                    table.PrimaryKey("PK_Usuarios", x => x.UsuarioId);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -112,41 +79,74 @@ namespace ApiBarbearia.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Usuarios",
+                name: "Emails",
                 columns: table => new
                 {
-                    UsuarioId = table.Column<int>(type: "int", nullable: false)
+                    EmailId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Nome = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                    EnderecoEmail = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Cpf = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DataNascimento = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    NivelAcesso = table.Column<int>(type: "Int(1)", nullable: false),
-                    EmailId = table.Column<int>(type: "int", nullable: false),
-                    TelefoneId = table.Column<int>(type: "int", nullable: false),
-                    EnderecoId = table.Column<int>(type: "int", nullable: false)
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.UsuarioId);
+                    table.PrimaryKey("PK_Emails", x => x.EmailId);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Emails_EmailId",
-                        column: x => x.EmailId,
-                        principalTable: "Emails",
-                        principalColumn: "EmailId",
+                        name: "FK_Emails_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Enderecos",
+                columns: table => new
+                {
+                    EnderecoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Logradouro = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Numero = table.Column<int>(type: "int", nullable: false),
+                    Bairro = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Cep = table.Column<string>(type: "varchar(9)", maxLength: 9, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enderecos", x => x.EnderecoId);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Enderecos_EnderecoId",
-                        column: x => x.EnderecoId,
-                        principalTable: "Enderecos",
-                        principalColumn: "EnderecoId",
+                        name: "FK_Enderecos_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Telefones",
+                columns: table => new
+                {
+                    TelefoneId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Celular = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Fixo = table.Column<string>(type: "varchar(11)", maxLength: 11, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Telefones", x => x.TelefoneId);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Telefones_TelefoneId",
-                        column: x => x.TelefoneId,
-                        principalTable: "Telefones",
-                        principalColumn: "TelefoneId",
+                        name: "FK_Telefones_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -190,26 +190,25 @@ namespace ApiBarbearia.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Emails_UsuarioId",
+                table: "Emails",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enderecos_UsuarioId",
+                table: "Enderecos",
+                column: "UsuarioId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produtos_CategoriaId",
                 table: "Produtos",
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_EmailId",
-                table: "Usuarios",
-                column: "EmailId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_EnderecoId",
-                table: "Usuarios",
-                column: "EnderecoId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_TelefoneId",
-                table: "Usuarios",
-                column: "TelefoneId",
+                name: "IX_Telefones_UsuarioId",
+                table: "Telefones",
+                column: "UsuarioId",
                 unique: true);
         }
 
@@ -220,15 +219,6 @@ namespace ApiBarbearia.Migrations
                 name: "Agendamentos");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
-
-            migrationBuilder.DropTable(
-                name: "Usuarios");
-
-            migrationBuilder.DropTable(
-                name: "Categorias");
-
-            migrationBuilder.DropTable(
                 name: "Emails");
 
             migrationBuilder.DropTable(
@@ -236,6 +226,15 @@ namespace ApiBarbearia.Migrations
 
             migrationBuilder.DropTable(
                 name: "Telefones");
+
+            migrationBuilder.DropTable(
+                name: "Produtos");
+
+            migrationBuilder.DropTable(
+                name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "Categorias");
         }
     }
 }
