@@ -50,6 +50,18 @@ public class EnderecosController : ControllerBase{
         
     }
 
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Endereco endereco){
+
+        if(id != endereco.EnderecoId){
+            return NotFound("Endereço não encontrado");
+        }
+
+        _context.Entry(endereco).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(endereco);
+    }
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id){
         var endereco = _context.Enderecos.FirstOrDefault(e => e.EnderecoId == id);
