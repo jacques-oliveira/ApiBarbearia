@@ -48,4 +48,33 @@ private readonly AppDbContext _context;
         return new CreatedAtRouteResult("ObterAgendamento",
             new {id = agendamento.AgendamentoId, agendamento});
     }
+
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Agendamento agendamento) {
+
+        if(id != agendamento.AgendamentoId){
+            return NotFound();
+        }
+
+        _context.Entry(agendamento).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(agendamento);
+
+    }
+
+    [HttpDelete("id:int")]
+    public ActionResult Delete(int id){
+
+        var agendamento = _context.Agendamentos.FirstOrDefault(a => a.AgendamentoId == id);
+
+        if(agendamento is null){
+            return NotFound("Agendamento não econtrado");
+        }
+
+        _context.Remove(agendamento);
+        _context.SaveChanges();
+
+        return Ok(agendamento);
+    }
 }

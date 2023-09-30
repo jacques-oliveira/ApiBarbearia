@@ -19,7 +19,9 @@ public class Usuario{
     public int NivelAcesso {get; set;}    
     [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}   
-    public ICollection<Email>? Emails {get;set;}        
+    public ICollection<Email>? Emails {get;set;} 
+    [JsonIgnore]       
     public Endereco? Endereco {get; set;}
+    [JsonIgnore]       
     public Telefone? Telefone {get;set;}
 }
