@@ -69,4 +69,33 @@ public class CategoriasController : ControllerBase{
         return new CreatedAtRouteResult("ObterCategoria",
             new {id = categoria.CategoriaId, categoria});
     }
+
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Categoria categoria){
+        
+        if(id != categoria.CategoriaId){
+            return NotFound("Categoria não encontrada!");
+        }
+
+        _context.Categorias.Entry(categoria).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(categoria);
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id){
+
+        var categoria = _context.Categorias.FirstOrDefault(c => c.CategoriaId == id);
+
+        if(categoria is null){
+            return NotFound("Categoria não econtrada!");
+        }
+
+        _context.Categorias.Remove(categoria);
+        _context.SaveChanges();
+
+        return Ok(categoria);
+
+    }
 }
