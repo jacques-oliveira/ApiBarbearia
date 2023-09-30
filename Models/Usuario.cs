@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("Usuarios")]
 public class Usuario{
@@ -15,9 +16,12 @@ public class Usuario{
     [Required]
     public DateTime DataNascimento { get; set; }
     [Column(TypeName =("Int(1)"))]
-    public int NivelAcesso {get; set;}
-    public int EmailId {get;set;}
-    public int TelefoneId {get;set;}
-    public int EnderecoId {get;set;}
-    public ICollection<Agendamento>? Agendamentos {get;set;}           
+    public int NivelAcesso {get; set;}    
+    [JsonIgnore]
+    public ICollection<Agendamento>? Agendamentos {get;set;}   
+    public ICollection<Email>? Emails {get;set;} 
+    [JsonIgnore]       
+    public Endereco? Endereco {get; set;}
+    [JsonIgnore]       
+    public Telefone? Telefone {get;set;}
 }

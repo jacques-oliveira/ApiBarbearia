@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBarbearia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230924124559_mstart")]
-    partial class mstart
+    [Migration("20230928123139_MigracaoInicial")]
+    partial class MigracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +77,12 @@ namespace ApiBarbearia.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("EmailId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Emails");
                 });
@@ -106,7 +111,13 @@ namespace ApiBarbearia.Migrations
                     b.Property<int>("Numero")
                         .HasColumnType("int");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("EnderecoId");
+
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
 
                     b.ToTable("Enderecos");
                 });
@@ -160,7 +171,13 @@ namespace ApiBarbearia.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("varchar(11)");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("TelefoneId");
+
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
 
                     b.ToTable("Telefones");
                 });
@@ -179,12 +196,6 @@ namespace ApiBarbearia.Migrations
                     b.Property<DateTime>("DataNascimento")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("EmailId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EnderecoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("NivelAcesso")
                         .HasColumnType("Int(1)");
 
@@ -193,19 +204,7 @@ namespace ApiBarbearia.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
-                    b.Property<int>("TelefoneId")
-                        .HasColumnType("int");
-
                     b.HasKey("UsuarioId");
-
-                    b.HasIndex("EmailId")
-                        .IsUnique();
-
-                    b.HasIndex("EnderecoId")
-                        .IsUnique();
-
-                    b.HasIndex("TelefoneId")
-                        .IsUnique();
 
                     b.ToTable("Usuarios");
                 });
@@ -229,6 +228,24 @@ namespace ApiBarbearia.Migrations
                     b.Navigation("Usuarios");
                 });
 
+            modelBuilder.Entity("Email", b =>
+                {
+                    b.HasOne("Usuario", null)
+                        .WithMany("Emails")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Endereco", b =>
+                {
+                    b.HasOne("Usuario", null)
+                        .WithOne("Endereco")
+                        .HasForeignKey("Endereco", "UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Produto", b =>
                 {
                     b.HasOne("Categoria", null)
@@ -238,25 +255,15 @@ namespace ApiBarbearia.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Usuario", b =>
+            modelBuilder.Entity("Telefone", b =>
                 {
-                    b.HasOne("Email", null)
-                        .WithOne("Usuario")
-                        .HasForeignKey("Usuario", "EmailId")
+                    b.HasOne("Usuario", "Usuario")
+                        .WithOne("Telefone")
+                        .HasForeignKey("Telefone", "UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Endereco", null)
-                        .WithOne("Usuario")
-                        .HasForeignKey("Usuario", "EnderecoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Telefone", null)
-                        .WithOne("Usuario")
-                        .HasForeignKey("Usuario", "TelefoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Categoria", b =>
@@ -264,29 +271,20 @@ namespace ApiBarbearia.Migrations
                     b.Navigation("Produtos");
                 });
 
-            modelBuilder.Entity("Email", b =>
-                {
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("Endereco", b =>
-                {
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Produto", b =>
                 {
                     b.Navigation("Agendamentos");
                 });
 
-            modelBuilder.Entity("Telefone", b =>
-                {
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("Usuario", b =>
                 {
                     b.Navigation("Agendamentos");
+
+                    b.Navigation("Emails");
+
+                    b.Navigation("Endereco");
+
+                    b.Navigation("Telefone");
                 });
 #pragma warning restore 612, 618
         }

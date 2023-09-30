@@ -15,5 +15,5 @@ public class Endereco{
     [Required]
     [StringLength(9)]
     public string? Cep {get;set;}
-    public Usuario? Usuario {get; set;}
+    public int UsuarioId {get;set;}
 }

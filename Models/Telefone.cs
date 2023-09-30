@@ -10,5 +10,5 @@ public class Telefone{
     public string? Celular {get;set;}
     [StringLength(11)]
     public string? Fixo {get;set;}
-    public Usuario? Usuario {get; set;}
+    public int UsuarioId {get;set;}    
 }

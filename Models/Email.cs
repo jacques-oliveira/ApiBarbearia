@@ -8,5 +8,5 @@ public class Email{
     [Required]
     [StringLength(80)]
     public string? EnderecoEmail {get; set;}
-    public Usuario? Usuario {get; set;}
+    public int UsuarioId {get; set;}
 }
