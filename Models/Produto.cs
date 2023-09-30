@@ -18,7 +18,6 @@ public class Produto{
     [Required]
     [StringLength(300)]
     public string? ImagemUrl {get; set;}
-    public int CategoriaId {get; set;}
-    [JsonIgnore]
+    public int CategoriaId {get; set;}    
     public ICollection<Agendamento>? Agendamentos {get;set;}                   
 }
