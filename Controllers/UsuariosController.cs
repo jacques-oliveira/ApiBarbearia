@@ -59,5 +59,17 @@ public class UsuariosController : ControllerBase{
         return Ok(usuario);
     }
 
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id){
+        var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
 
+        if(usuario is null){
+            return BadRequest("Usuario não encontrado!");
+        }
+
+        _context.Usuarios.Remove(usuario);
+        _context.SaveChanges();
+
+        return Ok(usuario);
+    }
 }
