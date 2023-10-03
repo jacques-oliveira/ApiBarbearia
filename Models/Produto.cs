@@ -19,5 +19,6 @@ public class Produto{
     [StringLength(300)]
     public string? ImagemUrl {get; set;}
     public int CategoriaId {get; set;}    
+    [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}                   
 }
