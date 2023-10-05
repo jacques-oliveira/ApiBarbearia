@@ -23,4 +23,23 @@ public class EmailsController : ControllerBase{
 
         return emails;
     }
+
+    [HttpGet("{id:int}")]
+    public ActionResult<Email> Get(int id){
+        
+        try{
+
+            var email = _context.Emails.FirstOrDefault(e => e.EmailId == id);
+
+            if(email is null){
+                return NotFound("Email não econtrado!");
+            }
+
+            return Ok(email);
+
+        }catch(Exception){
+            return StatusCode(StatusCodes.Status500InternalServerError,
+            "Ocorreu um erro ao tratar a solicitação");
+        }    
+    }
 }
