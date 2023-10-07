@@ -42,4 +42,18 @@ public class EmailsController : ControllerBase{
             "Ocorreu um erro ao tratar a solicitação");
         }    
     }
+
+    [HttpPut("{id:int}")]
+    public ActionResult Put(int id, Email email){
+
+        if(id != email.EmailId){
+            return NotFound("Email não econtrado");
+        }
+
+        _context.Emails.Entry(email).State = EntityState.Modified;
+        _context.SaveChanges();
+
+        return Ok(email);
+
+    }
 }
