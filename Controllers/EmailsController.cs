@@ -43,7 +43,7 @@ public class EmailsController : ControllerBase{
         }    
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:int:min(1)}")]
     public ActionResult Put(int id, Email email){
 
         try{
@@ -53,7 +53,14 @@ public class EmailsController : ControllerBase{
                 return BadRequest("Email não econtrado");
             }
 
-            _context.Emails.Entry(email).State = EntityState.Modified;
+            var emailDB  = _context.Emails.Find(id);
+
+            if(emailDB is null){
+                return NotFound("");
+            }
+
+            _context.Emails.Entry(emailDB).State = EntityState.Modified;
+            emailDB.EnderecoEmail = email.EnderecoEmail;
             _context.SaveChanges();
 
             return Ok(email);
