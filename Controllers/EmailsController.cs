@@ -43,17 +43,34 @@ public class EmailsController : ControllerBase{
         }    
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("{id:int:min(1)}")]
     public ActionResult Put(int id, Email email){
 
-        if(id != email.EmailId){
-            return NotFound("Email não econtrado");
+        try{
+
+            if (id != email.EmailId)
+            {
+                return BadRequest("Email não econtrado");
+            }
+
+            var emailDB  = _context.Emails.Find(id);
+
+            if(emailDB is null){
+                return NotFound("");
+            }
+
+            _context.Emails.Entry(emailDB).State = EntityState.Modified;
+            emailDB.EnderecoEmail = email.EnderecoEmail;
+            _context.SaveChanges();
+
+            return Ok(email);
+
         }
+        catch(Exception){
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                                "Ocorreu um erro ao tratar sua solicitação");
+        }      
 
-        _context.Emails.Entry(email).State = EntityState.Modified;
-        _context.SaveChanges();
-
-        return Ok(email);
 
     }
 }
