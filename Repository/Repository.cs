@@ -27,7 +27,7 @@ public class Repository<T> : IRepository<T> where T : class
 
     public T GetById(Expression<Func<T, bool>> predicate)
     {
-        return _context.Set<T>().SingleOrDefault(predicate);
+        return _context.Set<T>().AsNoTracking().SingleOrDefault(predicate);
     }
 
     public void Update(T entity)

@@ -12,12 +12,14 @@ builder.Services.AddDbContext<AppDbContext>(options=>
     options.UseMySql(MysqlConnection,
     ServerVersion.AutoDetect(MysqlConnection))
 );
+builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 
 builder.Services.AddControllers().AddJsonOptions(options=> 
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
