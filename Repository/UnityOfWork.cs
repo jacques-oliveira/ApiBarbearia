@@ -1,6 +1,8 @@
 public class UnityOfWork : IUnityOfWork{
     private ProdutoRepository _produtoRepo;
     private CategoriaRepository _categoriaRepo;
+
+    private UsuarioRepository _usuarioRepo;
     public AppDbContext _context;
 
     public IProdutoRepository ProdutoRepository {
@@ -15,6 +17,11 @@ public class UnityOfWork : IUnityOfWork{
         }
     }
 
+    public IUsuarioRepository UsuarioRepository{
+        get{
+            return _usuarioRepo = _usuarioRepo ?? new UsuarioRepository(_context);
+        }
+    }
     public UnityOfWork(AppDbContext context)
     {
         _context = context;

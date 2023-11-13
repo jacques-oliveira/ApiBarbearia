@@ -4,16 +4,16 @@ using Microsoft.EntityFrameworkCore;
 [ApiController]
 [Route("[controller]")]
 public class UsuariosController : ControllerBase{
-    private readonly AppDbContext _context;
+    private readonly IUnityOfWork _uow;
 
-    public UsuariosController(AppDbContext context)
+    public UsuariosController(IUnityOfWork context)
     {
-        _context = context;
+        _uow = context;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Usuario>> Get(){
-        var usuarios = _context.Usuarios.AsNoTracking().ToList();
+        var usuarios = _uow.UsuarioRepository.Get().ToList();
 
         if(usuarios is null){
             return BadRequest("Usuários não encontrados");
@@ -24,7 +24,7 @@ public class UsuariosController : ControllerBase{
 
     [HttpGet("{id:int}",Name ="ObterUsuario")]
     public ActionResult<Usuario> Get(int id){
-        var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
+        var usuario = _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
 
         if(usuario is null){
             return NotFound("Usuario não encontrado!");
@@ -39,8 +39,8 @@ public class UsuariosController : ControllerBase{
             return BadRequest();
         }
 
-        _context.Usuarios.Add(usuario);
-        _context.SaveChanges();
+        _uow.UsuarioRepository.Add(usuario);
+        _uow.Commit();
 
         return new CreatedAtRouteResult("ObterUsuario",
             new { id = usuario.UsuarioId, usuario});
@@ -53,22 +53,22 @@ public class UsuariosController : ControllerBase{
             return NotFound("O usuário não existe!");
         }
 
-        _context.Entry(usuario).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-        _context.SaveChanges();
+        _uow.UsuarioRepository.Update(usuario);
+        _uow.Commit();
 
         return Ok(usuario);
     }
 
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id){
-        var usuario = _context.Usuarios.FirstOrDefault(u => u.UsuarioId == id);
+        var usuario = _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
 
         if(usuario is null){
             return BadRequest("Usuario não encontrado!");
         }
 
-        _context.Usuarios.Remove(usuario);
-        _context.SaveChanges();
+        _uow.UsuarioRepository.Delete(usuario);
+        _uow.Commit();
 
         return Ok(usuario);
     }
