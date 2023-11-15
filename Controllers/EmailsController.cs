@@ -5,17 +5,17 @@ using Microsoft.EntityFrameworkCore;
 [Route("[controller]")]
 public class EmailsController : ControllerBase{
 
-    private readonly AppDbContext _context;
+    private readonly IUnityOfWork _uow;
 
-    public EmailsController(AppDbContext context)
+    public EmailsController(IUnityOfWork context)
     {
-        _context = context;
+        _uow = context;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Email>> Get(){
         
-        var emails = _context.Emails.AsTracking().ToList();
+        var emails = _uow.EmailRepository.Get().ToList();
 
         if(emails is null){
             return NotFound("Emails não econtrado");
@@ -29,7 +29,7 @@ public class EmailsController : ControllerBase{
         
         try{
 
-            var email = _context.Emails.FirstOrDefault(e => e.EmailId == id);
+            var email = _uow.EmailRepository.GetById(e => e.EmailId == id);
 
             if(email is null){
                 return NotFound("Email não econtrado!");
@@ -53,15 +53,15 @@ public class EmailsController : ControllerBase{
                 return BadRequest("Email não econtrado");
             }
 
-            var emailDB  = _context.Emails.Find(id);
+            var emailDB  = _uow.EmailRepository.GetById(e=> e.EmailId == id);
 
             if(emailDB is null){
                 return NotFound("");
             }
-
-            _context.Emails.Entry(emailDB).State = EntityState.Modified;
+            
             emailDB.EnderecoEmail = email.EnderecoEmail;
-            _context.SaveChanges();
+            _uow.EmailRepository.Update(emailDB);
+            _uow.Commit();
 
             return Ok(email);
 
