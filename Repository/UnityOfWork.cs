@@ -3,6 +3,7 @@ public class UnityOfWork : IUnityOfWork{
     private CategoriaRepository _categoriaRepo;
 
     private UsuarioRepository _usuarioRepo;
+    private EmailRepository _emailRepo;
     public AppDbContext _context;
 
     public IProdutoRepository ProdutoRepository {
@@ -22,6 +23,13 @@ public class UnityOfWork : IUnityOfWork{
             return _usuarioRepo = _usuarioRepo ?? new UsuarioRepository(_context);
         }
     }
+
+    public IEmailRepository EmailRepository {
+        get{
+            return _emailRepo = _emailRepo ?? new EmailRepository(_context);
+        }
+    }
+
     public UnityOfWork(AppDbContext context)
     {
         _context = context;
