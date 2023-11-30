@@ -5,17 +5,17 @@ using Microsoft.EntityFrameworkCore;
 [Route("[controller]")]
 public class EnderecosController : ControllerBase{
 
-    private readonly AppDbContext _context;
+    private readonly IUnityOfWork _uow;
 
-    public EnderecosController(AppDbContext context)
+    public EnderecosController(IUnityOfWork context)
     {
-        _context = context;
+        _uow = context;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Endereco>> Get(){
         
-        var enderecos = _context.Enderecos.AsNoTracking().ToList();
+        var enderecos = _uow.EnderecoRepository.Get().ToList();
 
         if(enderecos is null){
             return NotFound("Não existem endereços cadastrados");
@@ -27,7 +27,7 @@ public class EnderecosController : ControllerBase{
     [HttpGet("{id:int}",Name ="ObterEndereco")]
     public ActionResult<Endereco> Get(int id){
 
-        var endereco = _context.Enderecos.FirstOrDefault(e => e.EnderecoId == id);
+        var endereco = _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
 
         if(id != endereco?.EnderecoId){
             return NotFound("Endereço não encontrado!");
@@ -42,8 +42,8 @@ public class EnderecosController : ControllerBase{
             return BadRequest();
         }
 
-        _context.Enderecos.Add(endereco);
-        _context.SaveChanges();
+        _uow.EnderecoRepository.Add(endereco);
+        _uow.Commit();
 
         return new CreatedAtRouteResult("ObterEndereco",
             new {id = endereco.EnderecoId, endereco});
@@ -57,21 +57,21 @@ public class EnderecosController : ControllerBase{
             return NotFound("Endereço não encontrado");
         }
 
-        _context.Entry(endereco).State = EntityState.Modified;
-        _context.SaveChanges();
+        _uow.EnderecoRepository.Update(endereco);
+        _uow.Commit();
 
         return Ok(endereco);
     }
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id){
-        var endereco = _context.Enderecos.FirstOrDefault(e => e.EnderecoId == id);
+        var endereco = _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
 
         if(endereco is null){
             return NotFound("Endereço não encontrado");
         }
 
-        _context.Remove(endereco);
-        _context.SaveChanges();
+        _uow.EnderecoRepository.Delete(endereco);
+        _uow.Commit();
 
         return Ok(endereco);
     }

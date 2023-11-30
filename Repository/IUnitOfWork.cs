@@ -3,5 +3,6 @@ public interface IUnityOfWork{
     ICategoriaRepository CategoriaRepository {get;}
     IUsuarioRepository UsuarioRepository {get;}
     IEmailRepository EmailRepository {get;}
+    IEnderecoRepository EnderecoRepository {get;}
     void Commit();
 }
