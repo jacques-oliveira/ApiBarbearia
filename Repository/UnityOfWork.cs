@@ -5,6 +5,7 @@ public class UnityOfWork : IUnityOfWork{
     private EmailRepository _emailRepo;
 
     private EnderecoRepository _enderecoRepo;
+    private AgendamentoRepository _agendamentoRepo;
     public AppDbContext _context;
 
     public IProdutoRepository ProdutoRepository {
@@ -34,6 +35,12 @@ public class UnityOfWork : IUnityOfWork{
     public IEnderecoRepository EnderecoRepository {
         get{
             return _enderecoRepo = _enderecoRepo ?? new EnderecoRepository(_context);
+        }
+    }
+
+    public IAgendamentoRepository AgendamentoRepository {
+        get{
+            return _agendamentoRepo = _agendamentoRepo ?? new AgendamentoRepository(_context);
         }
     }
 
