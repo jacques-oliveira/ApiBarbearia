@@ -5,18 +5,17 @@ using Microsoft.EntityFrameworkCore;
 [Route("[controller]")]
 public class AgendamentosController : ControllerBase{
 
-private readonly AppDbContext _context;
+private readonly IUnityOfWork _uow;
 
-    public AgendamentosController(AppDbContext context)
+    public AgendamentosController(IUnityOfWork context)
     {
-        _context = context;
+        _uow = context;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Agendamento>> Get(){
-        var agendamentos = _context.Agendamentos.
-            Include(u=> u.Usuarios).
-            Include(p=> p.Produtos).AsNoTracking().ToList();
+        var agendamentos = _uow.AgendamentoRepository.Get().ToList();
+            
 
         if(agendamentos is null){
             return BadRequest("Agendamento não enconrado!");
@@ -26,7 +25,7 @@ private readonly AppDbContext _context;
 
     [HttpGet("{id:int}",Name ="ObterAgendamento")]
     public ActionResult<Agendamento> Get(int id){
-        var agendamento = _context.Agendamentos.Include(u => u.Usuarios).FirstOrDefault(a => a.AgendamentoId == id);
+        var agendamento = _uow.AgendamentoRepository.Get().Include(u => u.Usuarios).FirstOrDefault(a => a.AgendamentoId == id);
 
         if(agendamento is null){
             return NotFound("Agendamento não econtrado!");
@@ -42,8 +41,8 @@ private readonly AppDbContext _context;
             return BadRequest();
         }
 
-        _context.Agendamentos.Add(agendamento);
-        _context.SaveChanges();
+        _uow.AgendamentoRepository.Add(agendamento);
+        _uow.Commit();
 
         return new CreatedAtRouteResult("ObterAgendamento",
             new {id = agendamento.AgendamentoId, agendamento});
@@ -56,8 +55,8 @@ private readonly AppDbContext _context;
             return NotFound();
         }
 
-        _context.Entry(agendamento).State = EntityState.Modified;
-        _context.SaveChanges();
+        _uow.AgendamentoRepository.Update(agendamento);
+        _uow.Commit();
 
         return Ok(agendamento);
 
@@ -66,14 +65,14 @@ private readonly AppDbContext _context;
     [HttpDelete("id:int")]
     public ActionResult Delete(int id){
 
-        var agendamento = _context.Agendamentos.FirstOrDefault(a => a.AgendamentoId == id);
+        var agendamento = _uow.AgendamentoRepository.GetById(a => a.AgendamentoId == id);
 
         if(agendamento is null){
             return NotFound("Agendamento não econtrado");
         }
 
-        _context.Remove(agendamento);
-        _context.SaveChanges();
+        _uow.AgendamentoRepository.Delete(agendamento);
+        _uow.Commit();
 
         return Ok(agendamento);
     }
