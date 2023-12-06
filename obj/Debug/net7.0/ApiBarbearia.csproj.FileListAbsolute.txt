@@ -75,3 +75,5 @@
 /home/jacques/Documentos/Api-Barbearia/ApiBarbearia/obj/Debug/net7.0/ApiBarbearia.pdb
 /home/jacques/Documentos/Api-Barbearia/ApiBarbearia/obj/Debug/net7.0/ApiBarbearia.genruntimeconfig.cache
 /home/jacques/Documentos/Api-Barbearia/ApiBarbearia/obj/Debug/net7.0/ref/ApiBarbearia.dll
+/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/bin/Debug/net7.0/AutoMapper.dll
+/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/bin/Debug/net7.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
