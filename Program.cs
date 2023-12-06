@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using ApiBarbearia.DTOs.Mappings;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,13 @@ builder.Services.AddDbContext<AppDbContext>(options=>
     ServerVersion.AutoDetect(MysqlConnection))
 );
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
+
+var mappingConfig = new MapperConfiguration(mc =>{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mappingConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers().AddJsonOptions(options=> 
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
