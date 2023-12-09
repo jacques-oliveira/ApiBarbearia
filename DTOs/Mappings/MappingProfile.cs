@@ -8,6 +8,7 @@ namespace ApiBarbearia.DTOs.Mappings
         {
             CreateMap<Produto, ProdutoDTO>().ReverseMap();
             CreateMap<Categoria, CategoriaDTO>().ReverseMap();
+            CreateMap<Usuario, UsuarioDTO>().ReverseMap();
         }
     }
 }
