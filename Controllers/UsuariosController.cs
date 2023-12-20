@@ -38,18 +38,19 @@ public class UsuariosController : ControllerBase{
     }
 
     [HttpPost]
-    public ActionResult Post([FromBody]Usuario usuario){
-        if(usuario is null){
+    public ActionResult Post(UsuarioDTO usuarioDto){
+
+        if(usuarioDto is null){
             return BadRequest();
         }
 
-        _uow.UsuarioRepository.Add(usuario);
-        _uow.Commit();
+        var usuario = _mapper.Map<Usuario>(usuarioDto);
 
-        var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
+        _uow.UsuarioRepository.Add(usuario);
+        _uow.Commit();        
 
         return new CreatedAtRouteResult("ObterUsuario",
-            new { id = usuarioDto.UsuarioId, usuarioDto});
+            new { id = usuario.UsuarioId, usuario});
     }
 
     [HttpPut("{id:int}")]

@@ -23,9 +23,9 @@ public class ProdutosController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<ProdutoDTO>> Get(){
+    public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters){
 
-        var produtos = _uow.ProdutoRepository.Get().ToList();
+        var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters).ToList();
 
         if(produtos is null){
             return NotFound("Produtos não econtrados!");
