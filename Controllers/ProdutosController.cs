@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +27,18 @@ public class ProdutosController : ControllerBase{
     [HttpGet]
     public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters){
 
-        var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters).ToList();
+        var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters);
+
+        var metadata = new{
+            produtos.TotalCount,
+            produtos.PageSize,
+            produtos.CurrentPage,
+            produtos.TotalPages,
+            produtos.HasNext,
+            produtos.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
 
         if(produtos is null){
             return NotFound("Produtos não econtrados!");
