@@ -7,8 +7,8 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
     }
 
-    public IEnumerable<Categoria> GetCategoriasProdutos()
+    public async Task<IEnumerable<Categoria>> GetCategoriasProdutos()
     {
-        return Get().Include( p => p.Produtos);
+        return await Get().Include( p => p.Produtos).ToListAsync();
     }    
 }

@@ -69,15 +69,15 @@ public class UsuariosController : ControllerBase{
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id){
-        var usuario = _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
+    public async Task<ActionResult> Delete(int id){
+        var usuario = await _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
 
         if(usuario is null){
             return BadRequest("Usuario não encontrado!");
         }
 
         _uow.UsuarioRepository.Delete(usuario);
-        _uow.Commit();
+        await _uow.Commit();
 
         var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
         
