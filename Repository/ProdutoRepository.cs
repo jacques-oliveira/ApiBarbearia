@@ -1,4 +1,6 @@
 
+using Microsoft.EntityFrameworkCore;
+
 public class ProdutoRepository : Repository<Produto>, IProdutoRepository
 {
     public ProdutoRepository(AppDbContext context) : base(context)
@@ -16,8 +18,8 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
             produtosParameters.PageNumber, produtosParameters.PageSize);
     }
 
-    public IEnumerable<Produto> GetProdutosPorPreco()
+    public async Task<IEnumerable<Produto>> GetProdutosPorPreco()
     {
-        return Get().OrderBy(p=> p.Preco).ToList();
+        return await Get().OrderBy(p=> p.Preco).ToListAsync();
     }
 }

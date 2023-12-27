@@ -25,9 +25,9 @@ public class EnderecosController : ControllerBase{
     }
 
     [HttpGet("{id:int}",Name ="ObterEndereco")]
-    public ActionResult<Endereco> Get(int id){
+    public async Task<ActionResult<Endereco>> Get(int id){
 
-        var endereco = _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
+        var endereco = await _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
 
         if(id != endereco?.EnderecoId){
             return NotFound("Endereço não encontrado!");
@@ -63,15 +63,15 @@ public class EnderecosController : ControllerBase{
         return Ok(endereco);
     }
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id){
-        var endereco = _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
+    public async Task<ActionResult> Delete(int id){
+        var endereco = await _uow.EnderecoRepository.GetById(e => e.EnderecoId == id);
 
         if(endereco is null){
             return NotFound("Endereço não encontrado");
         }
 
         _uow.EnderecoRepository.Delete(endereco);
-        _uow.Commit();
+        await _uow.Commit();
 
         return Ok(endereco);
     }

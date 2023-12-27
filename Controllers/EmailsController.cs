@@ -44,7 +44,7 @@ public class EmailsController : ControllerBase{
     }
 
     [HttpPut("{id:int:min(1)}")]
-    public ActionResult Put(int id, Email email){
+    public async Task<ActionResult> Put(int id, Email email){
 
         try{
 
@@ -53,7 +53,7 @@ public class EmailsController : ControllerBase{
                 return BadRequest("Email não econtrado");
             }
 
-            var emailDB  = _uow.EmailRepository.GetById(e=> e.EmailId == id);
+            var emailDB  = await _uow.EmailRepository.GetById(e=> e.EmailId == id);
 
             if(emailDB is null){
                 return NotFound("");

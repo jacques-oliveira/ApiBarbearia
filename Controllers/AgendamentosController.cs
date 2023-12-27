@@ -63,16 +63,16 @@ private readonly IUnityOfWork _uow;
     }
 
     [HttpDelete("id:int")]
-    public ActionResult Delete(int id){
+    public async Task<ActionResult> Delete(int id){
 
-        var agendamento = _uow.AgendamentoRepository.GetById(a => a.AgendamentoId == id);
+        var agendamento = await _uow.AgendamentoRepository.GetById(a => a.AgendamentoId == id);
 
         if(agendamento is null){
             return NotFound("Agendamento não econtrado");
         }
 
         _uow.AgendamentoRepository.Delete(agendamento);
-        _uow.Commit();
+        await _uow.Commit();
 
         return Ok(agendamento);
     }
