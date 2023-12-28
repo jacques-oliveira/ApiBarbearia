@@ -25,9 +25,9 @@ public class ProdutosController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<ProdutoDTO>> Get([FromQuery] ProdutosParameters produtosParameters){
+    public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get([FromQuery] ProdutosParameters produtosParameters){
 
-        var produtos = _uow.ProdutoRepository.GetProdutos(produtosParameters);
+        var produtos = await _uow.ProdutoRepository.GetProdutos(produtosParameters);
 
         var metadata = new{
             produtos.TotalCount,
