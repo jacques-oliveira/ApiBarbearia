@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,21 @@ public class CategoriasController : ControllerBase{
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get(){
+    public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get([FromQuery] CategoriasParameters categoriaParameters){
 
-        var categorias = await _uow.CategoriaRepository.Get().ToListAsync();
+        var categorias = await _uow.CategoriaRepository.GetCategorias(categoriaParameters);
+
+        var metadata = new {
+            categorias.TotalCount,
+            categorias.PageSize,
+            categorias.CurrentPage,
+            categorias.TotalPages,
+            categorias.HasNext,
+            categorias.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+        
         try{
 
             if(categorias is null){
