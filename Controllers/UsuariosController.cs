@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,20 @@ public class UsuariosController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<UsuarioDTO>> Get(){
-        var usuarios = _uow.UsuarioRepository.Get().ToList();
+    public async Task<ActionResult<IEnumerable<UsuarioDTO>>> Get([FromQuery] UsuariosParameters usuariosParameters){
+        var usuarios = await _uow.UsuarioRepository.GetUsuarios(usuariosParameters);
 
+        var metadata = new {
+            usuarios.TotalCount,
+            usuarios.PageSize,
+            usuarios.CurrentPage,
+            usuarios.TotalPages,
+            usuarios.HasNext,
+            usuarios.HasPrevious
+        };
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metadata));
+        
         if(usuarios is null){
             return BadRequest("Usuários não encontrados");
         }
