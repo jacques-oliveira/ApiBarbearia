@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj": {}
+    "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj": {}
   },
   "projects": {
-    "/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj": {
+    "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj",
+        "projectUniqueName": "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj",
         "projectName": "ApiBarbearia",
-        "projectPath": "/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj",
+        "projectPath": "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj",
         "packagesPath": "/home/jacques/.nuget/packages/",
-        "outputPath": "/home/jacques/Documentos/Api-Barbearia/ApiBarbearia/obj/",
+        "outputPath": "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/jacques/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net8.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net8.0": {
+            "targetAlias": "net8.0",
             "projectReferences": {}
           }
         },
@@ -35,36 +35,28 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net8.0": {
+          "targetAlias": "net8.0",
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
-              "version": "[12.0.1, )"
-            },
-            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
-              "target": "Package",
-              "version": "[12.0.1, )"
+              "version": "[13.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.13, )"
-            },
-            "Microsoft.EntityFrameworkCore.SqlServer": {
-              "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[8.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.13, )"
+              "version": "[8.0.1, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[7.0.0, )"
+              "version": "[8.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -84,12 +76,8 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[6.0.25, 6.0.25]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.25, 6.0.25]"
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.1, 8.0.1]"
             }
           ],
           "frameworkReferences": {
@@ -100,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.100/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
