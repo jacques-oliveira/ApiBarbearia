@@ -24,7 +24,7 @@ public class EmailsController : ControllerBase{
         return emails;
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{id:int}",Name ="ObterEmail")]
     public ActionResult<Email> Get(int id){
         
         try{
@@ -41,6 +41,26 @@ public class EmailsController : ControllerBase{
             return StatusCode(StatusCodes.Status500InternalServerError,
             "Ocorreu um erro ao tratar a solicitação");
         }    
+    }
+
+    [HttpPost]
+    public ActionResult Post(Email email){
+
+        try{
+            if(email == null){
+
+                return BadRequest();
+            }
+            _uow.EmailRepository.Add(email);
+            _uow.Commit();
+
+            return Ok(email);
+            
+        }catch(Exception ex){
+
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                "Ocorreu um problema ao tratar sua solicitação.");
+        }
     }
 
     [HttpPut("{id:int:min(1)}")]
