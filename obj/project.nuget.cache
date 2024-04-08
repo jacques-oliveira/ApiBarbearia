@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EgtBfgdKnHwPd9gB+/GKvRc93XCpMvZjP4GFrcu6OOtw8Rr5IOBLCE1qbHfo0EztI+zlXVk5D2XL0wi3nd+t1Q==",
+  "dgSpecHash": "hSp/wMPbC2Tgdi4jLYup1s86OewCcbZAVzYJUDnMARmr9gOv2wEZdorpqvpRNZIqy/BFOS4yWLe8kU4TmpdP4g==",
   "success": true,
   "projectFilePath": "/home/jacques/Documentos/projeto-barbearia/Api-Barbearia/ApiBarbearia/ApiBarbearia.csproj",
   "expectedPackageFiles": [
@@ -52,7 +52,7 @@
     "/home/jacques/.nuget/packages/system.text.encodings.web/8.0.0/system.text.encodings.web.8.0.0.nupkg.sha512",
     "/home/jacques/.nuget/packages/system.text.json/8.0.0/system.text.json.8.0.0.nupkg.sha512",
     "/home/jacques/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512",
-    "/home/jacques/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.1/microsoft.aspnetcore.app.ref.8.0.1.nupkg.sha512"
+    "/home/jacques/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.2/microsoft.aspnetcore.app.ref.8.0.2.nupkg.sha512"
   ],
   "logs": []
 }

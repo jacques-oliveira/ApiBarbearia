@@ -75,7 +75,7 @@ public class ProdutosController : ControllerBase{
         var produtoDTO = _mapper.Map<ProdutoDTO>(produto);
 
         return new CreatedAtRouteResult("ObterProduto",
-            new {id = produto.ProdutoId},produtoDTO);
+            new {id = produto.ProdutoId,produtoDTO});
 
     }
 
