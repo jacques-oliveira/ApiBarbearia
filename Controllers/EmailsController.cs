@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 public class EmailsController : ControllerBase{
 
     private readonly IUnityOfWork _uow;
+    private readonly ILogger<EmailsController> _logger;
 
-    public EmailsController(IUnityOfWork context)
+    public EmailsController(IUnityOfWork context,ILogger<EmailsController> logger)
     {
         _uow = context;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -18,6 +20,7 @@ public class EmailsController : ControllerBase{
         var emails = _uow.EmailRepository.Get().ToList();
 
         if(emails is null){
+            
             return NotFound("Emails não econtrado");
         }
 
@@ -31,7 +34,7 @@ public class EmailsController : ControllerBase{
 
             var email = await _uow.EmailRepository.GetById(e => e.EmailId == id);
 
-            if(id != email?.EmailId){
+            if(email is null){
                 return NotFound("Email não econtrado!");
             }
 
@@ -44,22 +47,22 @@ public class EmailsController : ControllerBase{
     }
 
     [HttpPost]
-    public ActionResult Post(Email email){
+    public async Task<ActionResult> Post(Email email){
 
         try{
-            if(email == null){
+            if(email is null){
 
                 return BadRequest();
             }
             _uow.EmailRepository.Add(email);
-            _uow.Commit();
+            await _uow.Commit();
 
-            return Ok(email);
+                    return new CreatedAtRouteResult("ObterEmail",
+            new {id = email.EmailId,email});
             
         }catch(Exception ex){
 
-            return StatusCode(StatusCodes.Status500InternalServerError,
-                "Ocorreu um problema ao tratar sua solicitação.");
+            return StatusCode(500);
         }
     }
 
@@ -92,5 +95,28 @@ public class EmailsController : ControllerBase{
         }      
 
 
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id){
+
+        try{
+
+            var email = await _uow.EmailRepository.GetById(e=> e.EmailId == id);
+
+            if(email is null){
+                
+                return NotFound("O email não existe!");
+            }
+
+            _uow.EmailRepository.Delete(email);
+            await _uow.Commit();
+
+            return Ok(email);
+
+        }catch(Exception ex){
+
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
     }
 }
