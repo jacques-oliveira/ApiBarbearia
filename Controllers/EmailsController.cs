@@ -91,6 +91,7 @@ public class EmailsController : ControllerBase{
 
         }
         catch(Exception){
+            _logger.LogError($"Erro ao atualizar o email com id: {id}");
             return StatusCode(StatusCodes.Status500InternalServerError,
                                 "Ocorreu um erro ao tratar sua solicitação");
         }      
