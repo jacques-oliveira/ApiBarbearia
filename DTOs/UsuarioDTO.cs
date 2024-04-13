@@ -10,12 +10,7 @@ public class UsuarioDTO
     public string? Cpf { get; set; }
 
     public DateTime DataNascimento { get; set; }
-
     public int NivelAcesso { get; set; }
-
-    [JsonIgnore]
-    public Endereco? Endereco { get; set; }
-
-    [JsonIgnore]
+    public Endereco? Endereco { get; set; }    
     public Telefone? Telefone { get; set; }
 }

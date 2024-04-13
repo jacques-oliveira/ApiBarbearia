@@ -20,9 +20,9 @@ public class Usuario{
     [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}   
     [JsonIgnore]
-    public ICollection<Email>? Emails {get;set;} 
-    [JsonIgnore]       
-    public virtual Endereco? Endereco {get; set;}
-    [JsonIgnore]       
+    public ICollection<Email>? Emails {get;set;}       
+    [JsonIgnore]
+    public virtual Endereco? Endereco {get; set;}         
+    [JsonIgnore]
     public virtual Telefone? Telefone {get;set;}
 }

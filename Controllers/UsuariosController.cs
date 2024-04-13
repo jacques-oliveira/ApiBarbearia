@@ -38,19 +38,30 @@ public class UsuariosController : ControllerBase{
     }
 
     [HttpGet("{id:int}",Name ="ObterUsuario")]
-    public ActionResult<UsuarioDTO> Get(int id){
-        var usuario = _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
+    public async Task<ActionResult<UsuarioDTO>> Get(int id){
+        var usuario = await _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
 
         if(usuario is null){
             return NotFound("Usuario não encontrado!");
         }
 
         var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
-        return usuarioDto;
+        return Ok(usuarioDto);
+    }
+
+    [HttpGet("dados")]
+    public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetDadosUsuario(){
+        var dadosUsuario = await _uow.UsuarioRepository.GetDadosUsuarios();
+
+        if(dadosUsuario is null){
+            return BadRequest("Dados Não Encontrados!");
+        }
+        var dadosUsuarioDto = _mapper.Map<List<UsuarioDTO>>(dadosUsuario);
+        return dadosUsuarioDto;
     }
 
     [HttpPost]
-    public ActionResult Post(UsuarioDTO usuarioDto){
+    public async Task<ActionResult> Post(UsuarioDTO usuarioDto){
 
         if(usuarioDto is null){
             return BadRequest();
@@ -59,7 +70,7 @@ public class UsuariosController : ControllerBase{
         var usuario = _mapper.Map<Usuario>(usuarioDto);
 
         _uow.UsuarioRepository.Add(usuario);
-        _uow.Commit();        
+        await _uow.Commit();        
 
         return new CreatedAtRouteResult("ObterUsuario",
             new { id = usuario.UsuarioId, usuario});
