@@ -22,7 +22,7 @@ public class Usuario{
     [JsonIgnore]
     public ICollection<Email>? Emails {get;set;} 
     [JsonIgnore]       
-    public Endereco? Endereco {get; set;}
+    public virtual Endereco? Endereco {get; set;}
     [JsonIgnore]       
-    public Telefone? Telefone {get;set;}
+    public virtual Telefone? Telefone {get;set;}
 }

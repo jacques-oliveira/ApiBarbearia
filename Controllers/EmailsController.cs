@@ -28,14 +28,13 @@ public class EmailsController : ControllerBase{
     }
 
     [HttpGet("{id:int}",Name ="ObterEmail")]
-    public ActionResult<Email> Get(int id){
+    public async Task<ActionResult<Email>> Get(int id){
         
         try{
 
-            var email = _uow.EmailRepository.GetById(e => e.EmailId == id);
+            var email = await _uow.EmailRepository.GetById(e => e.EmailId == id);
 
             if(email is null){
-                _logger.LogWarning($"O Email com ID: {id} não está definido no sistema!");
                 return NotFound("Email não econtrado!");
             }
 
