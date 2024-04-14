@@ -77,7 +77,7 @@ public class UsuariosController : ControllerBase{
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<UsuarioDTO> Put(int id, UsuarioDTO usuarioDto){
+    public async Task<ActionResult<UsuarioDTO>> Put(int id, UsuarioDTO usuarioDto){
         
         if(id != usuarioDto.UsuarioId){
             return NotFound("O usuário não existe!");
@@ -86,7 +86,7 @@ public class UsuariosController : ControllerBase{
         var usuario = _mapper.Map<Usuario>(usuarioDto);
 
         _uow.UsuarioRepository.Update(usuario);
-        _uow.Commit();
+        await _uow.Commit();
 
         return Ok(usuarioDto);
     }
