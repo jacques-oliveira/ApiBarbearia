@@ -15,16 +15,16 @@ public class EmailsController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Email>> Get(){
+    public async Task<ActionResult<IEnumerable<Email>>> Get(){
         
-        var emails = _uow.EmailRepository.Get().ToList();
+        var emails = await _uow.EmailRepository.Get().ToListAsync();
 
         if(emails is null){
             
             return NotFound("Emails não econtrado");
         }
 
-        return emails;
+        return Ok(emails);
     }
 
     [HttpGet("{id:int}",Name ="ObterEmail")]

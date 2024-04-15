@@ -54,8 +54,10 @@ public class UsuariosController : ControllerBase{
         var dadosUsuario = await _uow.UsuarioRepository.GetDadosUsuarios();
 
         if(dadosUsuario is null){
+
             return BadRequest("Dados Não Encontrados!");
         }
+        
         var dadosUsuarioDto = _mapper.Map<List<UsuarioDTO>>(dadosUsuario);
         return dadosUsuarioDto;
     }
