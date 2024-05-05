@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using ApiBarbearia.DTOs.Mappings;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,10 @@ builder.Services.AddControllers().AddJsonOptions(options=>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+                
 builder.Services.AddHttpContextAccessor();
 
 builder.Logging.AddProvider( new CustomLoggerProvider( new CustomLoggerProviderConfiguration
