@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -10,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBarbearia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240505193207_CriaTabelasIdentity")]
-    partial class CriaTabelasIdentity
+    [Migration("20240506052630_MigracaoInicial")]
+    partial class MigracaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,11 +22,15 @@ namespace ApiBarbearia.Migrations
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
             modelBuilder.Entity("Agendamento", b =>
                 {
                     b.Property<int>("AgendamentoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("AgendamentoId"));
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime(6)");
@@ -45,11 +50,83 @@ namespace ApiBarbearia.Migrations
                     b.ToTable("Agendamentos");
                 });
 
+            modelBuilder.Entity("ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
             modelBuilder.Entity("Categoria", b =>
                 {
                     b.Property<int>("CategoriaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CategoriaId"));
 
                     b.Property<string>("ImagemUrl")
                         .IsRequired()
@@ -72,6 +149,8 @@ namespace ApiBarbearia.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("EmailId"));
+
                     b.Property<string>("EnderecoEmail")
                         .IsRequired()
                         .HasMaxLength(80)
@@ -93,6 +172,8 @@ namespace ApiBarbearia.Migrations
                     b.Property<int>("EnderecoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("EnderecoId"));
 
                     b.Property<string>("Bairro")
                         .IsRequired()
@@ -155,6 +236,8 @@ namespace ApiBarbearia.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
 
@@ -172,75 +255,13 @@ namespace ApiBarbearia.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("longtext");
@@ -321,6 +342,8 @@ namespace ApiBarbearia.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("ProdutoId"));
+
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
@@ -355,6 +378,8 @@ namespace ApiBarbearia.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TelefoneId"));
+
                     b.Property<string>("Celular")
                         .IsRequired()
                         .HasMaxLength(11)
@@ -380,6 +405,8 @@ namespace ApiBarbearia.Migrations
                     b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("UsuarioId"));
 
                     b.Property<string>("Cpf")
                         .IsRequired()
@@ -450,7 +477,7 @@ namespace ApiBarbearia.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,7 +486,7 @@ namespace ApiBarbearia.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,7 +501,7 @@ namespace ApiBarbearia.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,7 +510,7 @@ namespace ApiBarbearia.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

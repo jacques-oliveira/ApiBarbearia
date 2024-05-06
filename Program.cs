@@ -1,20 +1,52 @@
+using System.Text;
 using System.Text.Json.Serialization;
 using ApiBarbearia.DTOs.Mappings;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+                
 string MysqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<AppDbContext>(options=>
     options.UseMySql(MysqlConnection,
     ServerVersion.AutoDetect(MysqlConnection))
 );
+
+var secretKey = builder.Configuration["JWT:SecretKey"]
+                    ?? throw new ArgumentException("Invalid secret key!!");
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }    
+).AddJwtBearer(options =>
+    {
+        options.SaveToken =true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters(){
+            ValidateIssuer= true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
+            ValidAudience = builder.Configuration["JWT:ValidAudience"],
+            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(secretKey)
+            )
+        };
+    }
+);
+
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
 
 var mappingConfig = new MapperConfiguration(mc =>{
@@ -29,7 +61,7 @@ builder.Services.AddControllers().AddJsonOptions(options=>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
                 
