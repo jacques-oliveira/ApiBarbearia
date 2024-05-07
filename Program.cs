@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(options =>
 );
 
 builder.Services.AddScoped<IUnityOfWork, UnityOfWork>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var mappingConfig = new MapperConfiguration(mc =>{
     mc.AddProfile(new MappingProfile());
