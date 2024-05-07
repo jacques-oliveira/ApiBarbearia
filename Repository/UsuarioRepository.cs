@@ -10,8 +10,9 @@ public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     public async Task<IEnumerable<Usuario>> GetDadosUsuarios()
     {
         return await Get()
-                    .Include(e=> e.Endereco).Where(e=> e.Endereco != null)
-                    .Include(em=> em.Email).Where(em=> em.Email != null)
+                    .Include(e=> e.Endereco)
+                    .Include(em=> em.Email)
+                    .Where( u=> u.Endereco != null || u.Email != null)
                     .ToListAsync();
     }
 
