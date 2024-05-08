@@ -63,4 +63,31 @@ public class AuthController :ControllerBase{
         }
         return Unauthorized();
     }
+
+    [HttpPost]
+    [Route("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterModelDTO model){
+
+        var userExists = await _userManager.FindByNameAsync(model.UserName!);
+
+        if(userExists != null){
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ResponseDTO { Status = "Error", Message = "Usuário já existe!"});
+        }
+
+        ApplicationUser user = new(){
+            Email = model.Email,
+            SecurityStamp =  Guid.NewGuid().ToString(),
+            UserName = model.UserName
+        };
+
+        var result = await _userManager.CreateAsync(user, model.Password!);
+
+        if(!result.Succeeded){
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                    new ResponseDTO { Status = "Error", Message = "Criação do usuário falhou."});
+        }
+
+        return Ok(new ResponseDTO { Status = "Sucessso", Message = "Usuário criado com sucesso!"});
+    }
 }
