@@ -13,14 +13,15 @@ private readonly IUnityOfWork _uow;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Agendamento>> Get(){
-        var agendamentos = _uow.AgendamentoRepository.Get().ToList();
-            
+    public async Task<ActionResult<IEnumerable<Agendamento>>> Get(){
+
+        var agendamentos = await _uow.AgendamentoRepository.Get().ToListAsync();            
 
         if(agendamentos is null){
             return BadRequest("Agendamento não enconrado!");
         }
-        return agendamentos;
+
+        return Ok(agendamentos);
     }
 
     [HttpGet("{id:int}",Name ="ObterAgendamento")]
