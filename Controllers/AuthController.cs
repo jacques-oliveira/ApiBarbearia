@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,5 +20,47 @@ public class AuthController :ControllerBase{
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+    }
+
+    [HttpPost]
+    [Route("login")]
+    public async Task<ActionResult> Login([FromBody] LoginModelDTO model){
+        var user = await _userManager.FindByNameAsync(model.UserName!);
+
+        if(user is not null && await _userManager.CheckPasswordAsync(user, model.Password!)){
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var authClaims = new List<Claim>{
+                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+
+            foreach(var userRole in userRoles){
+
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            var token = _tokenService.GenerateAccessToken(authClaims,_configuration);
+
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            _= int.TryParse(_configuration["JWT:RefreshTokenValidityInMinutes"],
+                                out int RefreshTokenValidityInMinutes);
+
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(RefreshTokenValidityInMinutes);
+
+            user.RefreshToken = refreshToken;
+
+            await _userManager.UpdateAsync(user);     
+
+            return Ok(new{
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                refreshToken = refreshToken,
+                Expiration = token.ValidTo
+            });                           
+
+        }
+        return Unauthorized();
     }
 }
