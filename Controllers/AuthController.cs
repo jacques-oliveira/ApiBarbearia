@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -135,5 +136,23 @@ public class AuthController :ControllerBase{
                 refreshToken = newRefreshToken
         });
 
+    }
+
+    [Authorize]
+    [HttpPost]
+    [Route("revoke/{username}")]
+    public async Task<IActionResult> Revoke(string username){
+        var user = await _userManager.FindByEmailAsync(username);
+
+        if(user == null){
+
+            return BadRequest("Nome de usuário inválido!");
+        }
+
+        user.RefreshToken = null;
+
+        await _userManager.UpdateAsync(user);
+
+        return NoContent();
     }
 }
