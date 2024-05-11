@@ -25,39 +25,41 @@ private readonly IUnityOfWork _uow;
     }
 
     [HttpGet("{id:int}",Name ="ObterAgendamento")]
-    public ActionResult<Agendamento> Get(int id){
-        var agendamento = _uow.AgendamentoRepository.Get().Include(u => u.Usuarios).FirstOrDefault(a => a.AgendamentoId == id);
+    public async Task<ActionResult<Agendamento>> Get(int id){
+
+        var agendamento = await _uow.AgendamentoRepository.Get().Include(u => u.Usuarios).FirstOrDefaultAsync(a => a.AgendamentoId == id);
 
         if(agendamento is null){
             return NotFound("Agendamento não econtrado!");
         }
 
-        return agendamento;
+        return Ok(agendamento);
     }
 
     [HttpPost]
-    public ActionResult Post(Agendamento agendamento){
+    public async Task<ActionResult> Post(Agendamento agendamento){
 
         if(agendamento is null){
+
             return BadRequest();
         }
 
         _uow.AgendamentoRepository.Add(agendamento);
-        _uow.Commit();
+        await _uow.Commit();
 
         return new CreatedAtRouteResult("ObterAgendamento",
             new {id = agendamento.AgendamentoId, agendamento});
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult Put(int id, Agendamento agendamento) {
+    public async Task<ActionResult> Put(int id, Agendamento agendamento) {
 
         if(id != agendamento.AgendamentoId){
             return NotFound();
         }
 
         _uow.AgendamentoRepository.Update(agendamento);
-        _uow.Commit();
+        await _uow.Commit();
 
         return Ok(agendamento);
 
