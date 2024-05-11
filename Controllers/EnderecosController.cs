@@ -37,13 +37,13 @@ public class EnderecosController : ControllerBase{
     }
 
     [HttpPost]
-    public ActionResult Post(Endereco endereco){
+    public async Task<ActionResult> Post(Endereco endereco){
         if(endereco is null){
             return BadRequest();
         }
 
         _uow.EnderecoRepository.Add(endereco);
-        _uow.Commit();
+        await _uow.Commit();
 
         return new CreatedAtRouteResult("ObterEndereco",
             new {id = endereco.EnderecoId, endereco});

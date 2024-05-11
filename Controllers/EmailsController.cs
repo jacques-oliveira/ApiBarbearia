@@ -15,16 +15,16 @@ public class EmailsController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Email>> Get(){
+    public async Task<ActionResult<IEnumerable<Email>>> Get(){
         
-        var emails = _uow.EmailRepository.Get().ToList();
+        var emails = await _uow.EmailRepository.Get().ToListAsync();
 
         if(emails is null){
             
             return NotFound("Emails não econtrado");
         }
 
-        return emails;
+        return Ok(emails);
     }
 
     [HttpGet("{id:int}",Name ="ObterEmail")]
@@ -35,7 +35,6 @@ public class EmailsController : ControllerBase{
             var email = await _uow.EmailRepository.GetById(e => e.EmailId == id);
 
             if(email is null){
-                _logger.LogWarning($"O Email com ID: {id} não está definido no sistema!");
                 return NotFound("Email não econtrado!");
             }
 

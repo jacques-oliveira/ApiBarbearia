@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBarbearia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240414141234_correcao-email")]
+    partial class correcaoemail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,7 +232,7 @@ namespace ApiBarbearia.Migrations
             modelBuilder.Entity("Email", b =>
                 {
                     b.HasOne("Usuario", null)
-                        .WithOne("Email")
+                        .WithOne("Emails")
                         .HasForeignKey("Email", "UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -276,7 +279,7 @@ namespace ApiBarbearia.Migrations
                 {
                     b.Navigation("Agendamentos");
 
-                    b.Navigation("Email");
+                    b.Navigation("Emails");
 
                     b.Navigation("Endereco");
 

@@ -14,15 +14,16 @@ public class Usuario{
     [StringLength(11)]
     public string? Cpf {get; set;}
     [Required]
+    [DisplayFormat(DataFormatString = "{dd/MM/yyyy}")]
     public DateTime DataNascimento { get; set; }
     [Column(TypeName =("Int(1)"))]
     public int NivelAcesso {get; set;}    
     [JsonIgnore]
     public ICollection<Agendamento>? Agendamentos {get;set;}   
     [JsonIgnore]
-    public ICollection<Email>? Emails {get;set;} 
-    [JsonIgnore]       
-    public Endereco? Endereco {get; set;}
-    [JsonIgnore]       
-    public Telefone? Telefone {get;set;}
+    public virtual Email? Email {get;set;}       
+    [JsonIgnore]
+    public virtual Endereco? Endereco {get; set;}         
+    [JsonIgnore]
+    public virtual Telefone? Telefone {get;set;}
 }

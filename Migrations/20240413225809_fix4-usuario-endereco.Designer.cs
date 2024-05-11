@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBarbearia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240413225809_fix4-usuario-endereco")]
+    partial class fix4usuarioendereco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,8 +82,7 @@ namespace ApiBarbearia.Migrations
 
                     b.HasKey("EmailId");
 
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Emails");
                 });
@@ -229,8 +231,8 @@ namespace ApiBarbearia.Migrations
             modelBuilder.Entity("Email", b =>
                 {
                     b.HasOne("Usuario", null)
-                        .WithOne("Email")
-                        .HasForeignKey("Email", "UsuarioId")
+                        .WithMany("Emails")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -276,7 +278,7 @@ namespace ApiBarbearia.Migrations
                 {
                     b.Navigation("Agendamentos");
 
-                    b.Navigation("Email");
+                    b.Navigation("Emails");
 
                     b.Navigation("Endereco");
 
