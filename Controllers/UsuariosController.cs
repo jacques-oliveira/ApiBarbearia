@@ -1,8 +1,11 @@
+using System.Net;
 using System.Text.Json;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+[Authorize(AuthenticationSchemes = "Bearer")]
 [ApiController]
 [Route("[controller]")]
 public class UsuariosController : ControllerBase{
@@ -13,7 +16,7 @@ public class UsuariosController : ControllerBase{
         _uow = context;
         _mapper = mapper;
     }
-
+    
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UsuarioDTO>>> Get([FromQuery] UsuariosParameters usuariosParameters){
         var usuarios = await _uow.UsuarioRepository.GetUsuarios(usuariosParameters);
@@ -37,18 +40,6 @@ public class UsuariosController : ControllerBase{
         return usuariosDto;
     }
 
-    [HttpGet("{id:int}",Name ="ObterUsuario")]
-    public async Task<ActionResult<UsuarioDTO>> Get(int id){
-        var usuario = await _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
-
-        if(usuario is null){
-            return NotFound("Usuario não encontrado!");
-        }
-
-        var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
-        return Ok(usuarioDto);
-    }
-
     [HttpGet("dados")]
     public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetDadosUsuario(){
         var dadosUsuario = await _uow.UsuarioRepository.GetDadosUsuarios();
@@ -60,6 +51,18 @@ public class UsuariosController : ControllerBase{
         
         var dadosUsuarioDto = _mapper.Map<List<UsuarioDTO>>(dadosUsuario);
         return dadosUsuarioDto;
+    }
+
+    [HttpGet("{id:int}",Name ="ObterUsuario")]
+    public async Task<ActionResult<UsuarioDTO>> Get(int id){
+        var usuario = await _uow.UsuarioRepository.GetById(u => u.UsuarioId == id);
+
+        if(usuario is null){
+            return NotFound("Usuario não encontrado!");
+        }
+
+        var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
+        return Ok(usuarioDto);
     }
 
     [HttpPost]
