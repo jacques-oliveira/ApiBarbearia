@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Authorize]
+[Authorize(AuthenticationSchemes ="Bearer")]
 [ApiController]
 [Route("[controller]")]
 public class EnderecosController : ControllerBase{
@@ -15,15 +15,15 @@ public class EnderecosController : ControllerBase{
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Endereco>> Get(){
+    public async Task<ActionResult<IEnumerable<Endereco>>> Get(){
         
-        var enderecos = _uow.EnderecoRepository.Get().ToList();
+        var enderecos = await _uow.EnderecoRepository.Get().ToListAsync();
 
         if(enderecos is null){
             return NotFound("Não existem endereços cadastrados");
         }
 
-        return enderecos;
+        return Ok(enderecos);
     }
 
     [HttpGet("{id:int}",Name ="ObterEndereco")]
@@ -53,14 +53,14 @@ public class EnderecosController : ControllerBase{
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult Put(int id, Endereco endereco){
+    public async Task<ActionResult> Put(int id, Endereco endereco){
 
         if(id != endereco.EnderecoId){
             return NotFound("Endereço não encontrado");
         }
 
         _uow.EnderecoRepository.Update(endereco);
-        _uow.Commit();
+        await _uow.Commit();
 
         return Ok(endereco);
     }
