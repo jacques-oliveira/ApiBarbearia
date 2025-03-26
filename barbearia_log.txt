@@ -1,0 +1,14 @@
+Warning: 8 - The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert.
+Information: 14 - Now listening on: https://localhost:7049
+Information: 14 - Now listening on: http://localhost:5147
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: /home/jacques/Documents/Sistema/ApiBarbearia
+Information: 0 - Application is shutting down...
+Warning: 8 - The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert.
+Information: 14 - Now listening on: https://localhost:7049
+Information: 14 - Now listening on: http://localhost:5147
+Information: 0 - Application started. Press Ctrl+C to shut down.
+Information: 0 - Hosting environment: Development
+Information: 0 - Content root path: /home/jacques/Documents/Sistema/ApiBarbearia
+Information: 0 - Application is shutting down...

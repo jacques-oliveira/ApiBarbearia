@@ -23,13 +23,18 @@ public class CustomerLogger : ILogger
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
              Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        string mensagem = $"{logLevel.ToString()}: {eventId.Id} - {formatter(state,exception)}";
-        EscreverTextoNoArquivo(mensagem);
+        
+        try{
+            string mensagem = $"{logLevel.ToString()}: {eventId.Id} - {formatter(state,exception)}";
+            EscreverTextoNoArquivo(mensagem);
+        }catch(Exception ex){
+            Console.WriteLine($"Erro ao escrever no arquivo de log: {ex.Message}");
+        }
     }
 
     private void EscreverTextoNoArquivo(string mensagem)
     {
-        string caminhoArquivoLog= @"/home/jacques/Downloads/apilog/barbearia_log.txt";
+        string caminhoArquivoLog= @"./barbearia_log.txt";
 
         using(StreamWriter streamWriter = new StreamWriter(caminhoArquivoLog, true)){
 
