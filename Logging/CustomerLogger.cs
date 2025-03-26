@@ -22,8 +22,7 @@ public class CustomerLogger : ILogger
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state,
              Exception? exception, Func<TState, Exception?, string> formatter)
-    {
-        
+    {        
         try{
             string mensagem = $"{logLevel.ToString()}: {eventId.Id} - {formatter(state,exception)}";
             EscreverTextoNoArquivo(mensagem);
@@ -35,18 +34,25 @@ public class CustomerLogger : ILogger
     private void EscreverTextoNoArquivo(string mensagem)
     {
         string caminhoArquivoLog= @"./barbearia_log.txt";
+        try
+        {
+            if (!File.Exists(caminhoArquivoLog))
+            {
 
-        using(StreamWriter streamWriter = new StreamWriter(caminhoArquivoLog, true)){
+                File.Create(caminhoArquivoLog);
+            }
 
-            try{
-
+            using (StreamWriter streamWriter = new StreamWriter(caminhoArquivoLog, true))
+            {                
                 streamWriter.WriteLine(mensagem);
                 streamWriter.Close();
-
-            }catch(Exception ex){
-
-                throw;
             }
+
         }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
     }
 }
