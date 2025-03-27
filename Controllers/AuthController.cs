@@ -26,14 +26,14 @@ public class AuthController :ControllerBase{
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult> Login([FromBody] LoginModelDTO model){
-        var user = await _userManager.FindByNameAsync(model.UserName!);
+        var user = await _userManager.FindByEmailAsync(model.Email!);
 
         if(user is not null && await _userManager.CheckPasswordAsync(user, model.Password!)){
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>{
-                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Name, user.Email!),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
@@ -69,7 +69,7 @@ public class AuthController :ControllerBase{
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModelDTO model){
 
-        var userExists = await _userManager.FindByNameAsync(model.UserName!);
+        var userExists = await _userManager.FindByEmailAsync(model.Email!);
 
         if(userExists != null){
             return StatusCode(StatusCodes.Status500InternalServerError,
