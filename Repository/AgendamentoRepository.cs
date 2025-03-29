@@ -9,7 +9,10 @@ public class AgendamentoRepository : Repository<Agendamento>, IAgendamentoReposi
 
     public async Task<IEnumerable<Agendamento>> GetAgendamentoUsuario()
     {
-        return await Get().Include(u=> u.Usuarios)
-            .Include(a => a.Produtos).AsNoTracking().ToListAsync();
+        return await Get()
+            .Include(u=> u.Usuarios)
+            .Include(a => a.Produtos)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

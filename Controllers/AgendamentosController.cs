@@ -16,15 +16,25 @@ private readonly IUnityOfWork _uow;
 
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Agendamento>>> Get(){
+    public async Task<ActionResult<IEnumerable<AgendamentoDTO>>> Get(){
 
-        var agendamentos = await _uow.AgendamentoRepository.Get().ToListAsync();            
-
+        var agendamentos = await _uow.AgendamentoRepository.GetAgendamentoUsuario();            
+        
         if(agendamentos is null){
             return BadRequest("Agendamento não enconrado!");
         }
-
-        return Ok(agendamentos);
+        
+        List<AgendamentoDTO> agendamentoDTOs = new List<AgendamentoDTO>();
+        foreach(var agendamento in agendamentos){
+            agendamentoDTOs.Add(new AgendamentoDTO{
+                DataAgendamento = agendamento.Data,
+                NomeUsuario = agendamento.Usuarios.Nome,
+                NomeProduto = agendamento.Produtos.Nome,
+                DescricaoProduto = agendamento.Produtos.Descricao,
+                PrecoProduto = agendamento.Produtos.Preco
+            });
+        }
+        return Ok(agendamentoDTOs.OrderBy(a => a.DataAgendamento));
     }
 
     [HttpGet("{id:int}",Name ="ObterAgendamento")]
